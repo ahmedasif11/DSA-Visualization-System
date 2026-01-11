@@ -1,7 +1,4 @@
-/**
- * @file AlgorithmMenuState.cpp
- * @brief Implementation of AlgorithmMenuState
- */
+
 
 #include "AlgorithmMenuState.h"
 #include "../Core/State/StateContext.h"
@@ -26,8 +23,7 @@ AlgorithmMenuState::AlgorithmMenuState(StateContext& context)
 
 void AlgorithmMenuState::onEnter() {
     setupButtons();
-    
-    // Setup background
+
     sf::Vector2u windowSize = m_context.getWindow().getSize();
     m_background.setSize(sf::Vector2f(windowSize.x, windowSize.y));
     m_background.setFillColor(sf::Color(
@@ -35,8 +31,7 @@ void AlgorithmMenuState::onEnter() {
         Config::Colors::BACKGROUND_G,
         Config::Colors::BACKGROUND_B
     ));
-    
-    // Setup title label
+
     m_titleLabel.setText("Algorithm Categories");
     m_titleLabel.setPosition(sf::Vector2f(20, 20));
     
@@ -52,8 +47,7 @@ void AlgorithmMenuState::setupButtons() {
     float buttonWidth = 300.0f;
     float buttonHeight = 60.0f;
     float buttonSpacing = 20.0f;
-    
-    // Sorting Algorithms button
+
     auto sortingBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -61,8 +55,7 @@ void AlgorithmMenuState::setupButtons() {
     );
     sortingBtn->setCallback([this]() { onSortingAlgorithmsClicked(); });
     m_buttons.push_back(std::move(sortingBtn));
-    
-    // Data Structures button (disabled/locked)
+
     auto dataStructuresBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY + buttonHeight + buttonSpacing),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -70,8 +63,7 @@ void AlgorithmMenuState::setupButtons() {
     );
     dataStructuresBtn->setEnabled(false);
     m_buttons.push_back(std::move(dataStructuresBtn));
-    
-    // Back button
+
     auto backBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY + 2 * (buttonHeight + buttonSpacing)),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -82,7 +74,7 @@ void AlgorithmMenuState::setupButtons() {
 }
 
 void AlgorithmMenuState::handleInput(const sf::Event& event) {
-    // Handle keyboard input
+
     if (event.is<sf::Event::KeyPressed>()) {
         const auto* keyData = event.getIf<sf::Event::KeyPressed>();
         if (keyData) {
@@ -106,8 +98,7 @@ void AlgorithmMenuState::handleInput(const sf::Event& event) {
             }
         }
     }
-    
-    // Handle mouse input
+
     if (event.is<sf::Event::MouseButtonPressed>()) {
         const auto* mouseData = event.getIf<sf::Event::MouseButtonPressed>();
         if (mouseData && mouseData->button == sf::Mouse::Button::Left) {
@@ -122,8 +113,7 @@ void AlgorithmMenuState::handleInput(const sf::Event& event) {
             }
         }
     }
-    
-    // Handle mouse hover
+
     if (event.is<sf::Event::MouseMoved>()) {
         const auto* mouseData = event.getIf<sf::Event::MouseMoved>();
         if (mouseData) {
@@ -163,7 +153,7 @@ void AlgorithmMenuState::render(sf::RenderTarget& target) {
 }
 
 void AlgorithmMenuState::onSortingAlgorithmsClicked() {
-    // Navigate to SortMenuState
+
     EventBus& eventBus = m_context.getEventBus();
     Event sortMenuEvent(EventType::StateChanged);
     sortMenuEvent.setData(StateID::SortMenu);
@@ -171,11 +161,11 @@ void AlgorithmMenuState::onSortingAlgorithmsClicked() {
 }
 
 void AlgorithmMenuState::onBackClicked() {
-    // Navigate back to MainMenuState
+
     EventBus& eventBus = m_context.getEventBus();
     Event backEvent(EventType::StateChanged);
     backEvent.setData(StateID::MainMenu);
     eventBus.publish(backEvent);
 }
 
-} // namespace DSA
+} 

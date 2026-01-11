@@ -1,7 +1,4 @@
-/**
- * @file StateManager.cpp
- * @brief Implementation of the StateManager class
- */
+
 
 #include "StateManager.h"
 #include "State.h"
@@ -26,20 +23,18 @@ void StateManager::registerState(StateID id, std::unique_ptr<State> state) {
 }
 
 void StateManager::pushState(StateID id) {
-    // Pause current state if exists
+
     if (m_currentStateID != StateID::None) {
         State* currentState = getCurrentState();
         if (currentState) {
             currentState->pause();
         }
     }
-    
-    // Push current state onto stack
+
     if (m_currentStateID != StateID::None) {
         m_stateStack.push(m_currentStateID);
     }
-    
-    // Set new state
+
     m_currentStateID = id;
     State* newState = getCurrentState();
     if (newState) {
@@ -49,21 +44,18 @@ void StateManager::pushState(StateID id) {
 
 void StateManager::popState() {
     if (m_currentStateID == StateID::None) {
-        return; // No state to pop
+        return;
     }
-    
-    // Exit current state
+
     State* currentState = getCurrentState();
     if (currentState) {
         currentState->onExit();
     }
-    
-    // Pop from stack
+
     if (!m_stateStack.empty()) {
         m_currentStateID = m_stateStack.top();
         m_stateStack.pop();
-        
-        // Resume previous state
+
         State* previousState = getCurrentState();
         if (previousState) {
             previousState->resume();
@@ -74,20 +66,18 @@ void StateManager::popState() {
 }
 
 void StateManager::changeState(StateID id) {
-    // Exit current state
+
     if (m_currentStateID != StateID::None) {
         State* currentState = getCurrentState();
         if (currentState) {
             currentState->onExit();
         }
     }
-    
-    // Clear stack for new state
+
     while (!m_stateStack.empty()) {
         m_stateStack.pop();
     }
-    
-    // Set new state
+
     m_currentStateID = id;
     State* newState = getCurrentState();
     if (newState) {
@@ -147,22 +137,20 @@ void StateManager::render(sf::RenderTarget& target) {
 }
 
 void StateManager::clear() {
-    // Exit current state
+
     if (m_currentStateID != StateID::None) {
         State* currentState = getCurrentState();
         if (currentState) {
             currentState->onExit();
         }
     }
-    
-    // Clear stack
+
     while (!m_stateStack.empty()) {
         m_stateStack.pop();
     }
-    
-    // Clear states
+
     m_states.clear();
     m_currentStateID = StateID::None;
 }
 
-} // namespace DSA
+} 

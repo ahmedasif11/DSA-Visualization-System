@@ -1,7 +1,4 @@
-/**
- * @file Button.cpp
- * @brief Implementation of Button component
- */
+
 
 #include "Button.h"
 #include "../Theme/ThemeManager.h"
@@ -19,23 +16,21 @@ Button::Button(const sf::Vector2f& position, const sf::Vector2f& size, const std
 {
     m_shape.setPosition(position);
     setText(text);
-    
-    // Set initial appearance
+
     updateAppearance();
 }
 
 void Button::setText(const std::string& text) {
-    // SFML 3.0: Text requires font in constructor
+
     try {
         ThemeManager& tm = ThemeManager::getInstance();
         tm.loadFonts();
         const sf::Font& font = tm.getMainFont();
-        
-        // Create text with font (SFML 3.0 requirement)
+
         m_text.emplace(font, text, 24);
         centerText();
     } catch (...) {
-        // Font not available, reset text
+
         m_text.reset();
     }
 }
@@ -94,8 +89,7 @@ bool Button::handleInput(const sf::Event& event, const sf::Vector2f& mousePositi
     
     m_mousePosition = mousePosition;
     bool isInside = contains(mousePosition);
-    
-    // Handle mouse button pressed
+
     if (event.is<sf::Event::MouseButtonPressed>()) {
         auto mouseData = event.getIf<sf::Event::MouseButtonPressed>();
         if (mouseData && mouseData->button == sf::Mouse::Button::Left && isInside) {
@@ -104,13 +98,12 @@ bool Button::handleInput(const sf::Event& event, const sf::Vector2f& mousePositi
             return true;
         }
     }
-    
-    // Handle mouse button released
+
     if (event.is<sf::Event::MouseButtonReleased>()) {
         auto mouseData = event.getIf<sf::Event::MouseButtonReleased>();
         if (mouseData && mouseData->button == sf::Mouse::Button::Left) {
             if (m_state == ButtonState::Pressed && isInside) {
-                // Button was clicked
+
                 if (m_callback) {
                     m_callback();
                 }
@@ -166,7 +159,7 @@ void Button::updateAppearance() {
         switch (m_state) {
             case ButtonState::Normal:
                 m_shape.setFillColor(theme.primaryColor);
-                // Use white text for better visibility on dark backgrounds
+
                 m_text->setFillColor(sf::Color::White);
                 break;
             case ButtonState::Hovered:
@@ -179,11 +172,11 @@ void Button::updateAppearance() {
                 break;
             case ButtonState::Disabled:
                 m_shape.setFillColor(theme.disabledColor);
-                m_text->setFillColor(sf::Color(200, 200, 200)); // Light gray for disabled
+                m_text->setFillColor(sf::Color(200, 200, 200));
                 break;
         }
     } else {
-        // No text, just set shape colors
+
         switch (m_state) {
             case ButtonState::Normal:
                 m_shape.setFillColor(theme.primaryColor);
@@ -215,5 +208,5 @@ void Button::centerText() {
     ));
 }
 
-} // namespace UI
-} // namespace DSA
+}
+} 

@@ -1,168 +1,94 @@
-# DSA Visualization System
+# DSA Visualizer
 
-A professional desktop application for visualizing Data Structures and Algorithms, built with C++ and SFML 3.0. This application provides interactive visualizations of sorting algorithms with step-by-step execution control.
+A simple C++ app I made to visualize sorting algorithms. It uses SFML 3.0 and shows how different sorting algorithms work step by step.
 
-![C++](https://img.shields.io/badge/C++-17+-00599C?style=flat&logo=c%2B%2B)
-![SFML](https://img.shields.io/badge/SFML-3.0-8CC445?style=flat)
-![License](https://img.shields.io/badge/License-MIT-blue?style=flat)
+## What it does
 
-## Features
+You can watch sorting algorithms in action with visual feedback. Currently supports:
+- Bubble Sort
+- Insertion Sort  
+- Selection Sort
 
-- **Interactive Algorithm Visualization**: Watch sorting algorithms execute step-by-step with visual feedback
-- **Multiple Sorting Algorithms**: 
-  - Bubble Sort
-  - Insertion Sort
-  - Selection Sort
-- **Real-time Controls**: Play, pause, reset, and navigate through algorithm steps
-- **Professional UI**: Clean, modern interface with hover effects and keyboard navigation
-- **Custom Implementation**: Core data structures and algorithms implemented from scratch (no STL dependencies)
+There's a play/pause button, reset, and you can control the speed with a slider. The bars show numbers and there's a legend to understand what the colors mean. Pretty straightforward.
 
-## Requirements
+## Building it
 
-- **Compiler**: GCC 7+ or MSVC 2017+ (C++17 support required)
-- **SFML**: Version 3.0 or higher
-- **Build System**: Make or CMake
-- **Platform**: Windows (tested with MSYS2 UCRT64), Linux, macOS
+I'm using Windows with MSYS2, but it should work on Linux/Mac too if you have SFML 3.0 installed.
 
-## Installation
+### Windows (MSYS2)
 
-### Windows (MSYS2 UCRT64)
+If you're using MSYS2 like me:
 
-1. Install MSYS2 from [msys2.org](https://www.msys2.org/)
-2. Open MSYS2 UCRT64 terminal
-3. Install dependencies:
-   ```bash
-   pacman -S mingw-w64-ucrt-x86_64-gcc
-   pacman -S mingw-w64-ucrt-x86_64-make
-   pacman -S mingw-w64-ucrt-x86_64-sfml
-   ```
-4. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd DSA-Visulizer
-   ```
-5. Build the project:
-   ```bash
-   make clean
-   make
-   ```
-6. Run the application:
-   ```bash
-   ./bin/DSA-Visulizer.exe
-   ```
+```bash
+# Install SFML and stuff
+pacman -S mingw-w64-ucrt-x86_64-gcc
+pacman -S mingw-w64-ucrt-x86_64-make
+pacman -S mingw-w64-ucrt-x86_64-sfml
+
+# Then build
+cd DSA-Visulizer
+make clean
+make
+```
+
+Run it from `bin/DSA-Visulizer.exe`
 
 ### Linux
 
 ```bash
-# Install dependencies (Ubuntu/Debian)
 sudo apt-get install build-essential libsfml-dev
-
-# Build
-make clean
-make
-
-# Run
+make clean && make
 ./bin/DSA-Visulizer
 ```
 
 ### macOS
 
 ```bash
-# Install dependencies via Homebrew
 brew install sfml
-
-# Build
-make clean
-make
-
-# Run
+make clean && make
 ./bin/DSA-Visulizer
 ```
 
-## Usage
+## How to use
 
-1. **Start the Application**: Launch the executable from the `bin/` directory
-2. **Main Menu**: Use mouse or arrow keys to navigate
-3. **Select Algorithm**: 
-   - Click "Algorithms" → "Sorting Algorithms"
-   - Choose a sorting algorithm (Bubble Sort, Insertion Sort, or Selection Sort)
-4. **Visualize**: 
-   - Click "Play" to start the visualization
-   - Use "Pause" to pause execution
-   - Use "Reset" to restart from the beginning
-   - Press ESC to open the pause menu
+1. Run the exe
+2. Click through menus (Algorithms → Sorting Algorithms)
+3. Pick a sorting algorithm
+4. Hit Play and watch it work
+5. Adjust speed with the slider on the bottom
+6. ESC opens pause menu, Space toggles play/pause
 
-## Project Structure
+That's pretty much it. The UI is self-explanatory.
+
+## Project structure
 
 ```
-DSA-Visulizer/
-├── src/
-│   ├── App/              # Application entry point and configuration
-│   ├── Core/             # Core systems (State, Events, Resources)
-│   ├── DSA/              # Data structures and algorithms
-│   ├── States/           # Application states (menus, visualizer)
-│   ├── UI/               # UI components (buttons, labels, themes)
-│   └── Visual/           # Visualization components
-├── build/                # Build output directory
-├── bin/                  # Executable output directory
-├── Makefile              # Build configuration
-└── README.md             # This file
+src/
+  App/          - main app stuff
+  Core/         - state management, events
+  DSA/          - algorithms and array implementation
+  States/       - different screens (menus, visualizer)
+  UI/           - buttons, labels, slider, themes
+  Visual/       - rendering components for bars/annotations
 ```
 
-## Architecture
+I tried to keep things organized but I'm sure it could be better. The code is comment-free now (as requested).
 
-The application follows a clean architecture with clear separation of concerns:
+## Notes
 
-- **State Management**: Game State Pattern for managing application screens
-- **Event System**: Publisher-subscriber pattern for decoupled communication
-- **Resource Management**: Centralized loading and caching of fonts and textures
-- **Algorithm Execution**: Step-by-step execution with timing control
-- **Visualization**: Modular rendering system for array visualization
+- Built with SFML 3.0 (had to update a lot of stuff from 2.x)
+- Everything is implemented from scratch, no STL containers for the core DSA stuff
+- Fonts fall back to system fonts if custom ones aren't found
+- The speed slider works in real-time, no stuttering
 
-## Building from Source
+## Building
 
-### Using Make
+Just use `make`. Or CMake if you prefer:
 
 ```bash
-make clean    # Clean build artifacts
-make          # Build the project
-make run      # Build and run (if available)
-```
-
-### Using CMake
-
-```bash
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
 make
-./DSA-Visulizer
 ```
 
-## Keyboard Shortcuts
-
-- **Arrow Keys**: Navigate menus
-- **Enter/Space**: Select/Activate
-- **ESC**: Pause menu / Go back
-
-## Contributing
-
-Contributions are welcome! Please follow these guidelines:
-
-1. Maintain code style consistency
-2. Add appropriate comments for complex logic
-3. Test changes thoroughly
-4. Update documentation as needed
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Acknowledgments
-
-- Built with [SFML](https://www.sfml-dev.org/) graphics library
-- Inspired by the need for better algorithm visualization tools
-
----
-
-**Note**: Fonts are automatically loaded from system fonts if custom fonts are not available. The application will use Windows system fonts (Arial, Tahoma, etc.) as fallback.
+That's it. Let me know if something breaks or if you want more algorithms added.

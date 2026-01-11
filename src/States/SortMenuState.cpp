@@ -1,7 +1,4 @@
-/**
- * @file SortMenuState.cpp
- * @brief Implementation of SortMenuState
- */
+
 
 #include "SortMenuState.h"
 #include "../Core/State/StateContext.h"
@@ -29,8 +26,7 @@ SortMenuState::SortMenuState(StateContext& context)
 
 void SortMenuState::onEnter() {
     setupButtons();
-    
-    // Setup background
+
     sf::Vector2u windowSize = m_context.getWindow().getSize();
     m_background.setSize(sf::Vector2f(windowSize.x, windowSize.y));
     m_background.setFillColor(sf::Color(
@@ -38,8 +34,7 @@ void SortMenuState::onEnter() {
         Config::Colors::BACKGROUND_G,
         Config::Colors::BACKGROUND_B
     ));
-    
-    // Setup title label
+
     m_titleLabel.setText("Sorting Algorithms");
     m_titleLabel.setPosition(sf::Vector2f(20, 20));
     
@@ -55,8 +50,7 @@ void SortMenuState::setupButtons() {
     float buttonWidth = 300.0f;
     float buttonHeight = 60.0f;
     float buttonSpacing = 20.0f;
-    
-    // Bubble Sort button
+
     auto bubbleSortBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -64,8 +58,7 @@ void SortMenuState::setupButtons() {
     );
     bubbleSortBtn->setCallback([this]() { onBubbleSortClicked(); });
     m_buttons.push_back(std::move(bubbleSortBtn));
-    
-    // Insertion Sort button
+
     auto insertionSortBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY + buttonHeight + buttonSpacing),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -73,8 +66,7 @@ void SortMenuState::setupButtons() {
     );
     insertionSortBtn->setCallback([this]() { onInsertionSortClicked(); });
     m_buttons.push_back(std::move(insertionSortBtn));
-    
-    // Selection Sort button
+
     auto selectionSortBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY + 2 * (buttonHeight + buttonSpacing)),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -82,8 +74,7 @@ void SortMenuState::setupButtons() {
     );
     selectionSortBtn->setCallback([this]() { onSelectionSortClicked(); });
     m_buttons.push_back(std::move(selectionSortBtn));
-    
-    // Back button
+
     auto backBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY + 3 * (buttonHeight + buttonSpacing)),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -94,7 +85,7 @@ void SortMenuState::setupButtons() {
 }
 
 void SortMenuState::handleInput(const sf::Event& event) {
-    // Handle keyboard input
+
     if (event.is<sf::Event::KeyPressed>()) {
         const auto* keyData = event.getIf<sf::Event::KeyPressed>();
         if (keyData) {
@@ -118,8 +109,7 @@ void SortMenuState::handleInput(const sf::Event& event) {
             }
         }
     }
-    
-    // Handle mouse input
+
     if (event.is<sf::Event::MouseButtonPressed>()) {
         const auto* mouseData = event.getIf<sf::Event::MouseButtonPressed>();
         if (mouseData && mouseData->button == sf::Mouse::Button::Left) {
@@ -134,8 +124,7 @@ void SortMenuState::handleInput(const sf::Event& event) {
             }
         }
     }
-    
-    // Handle mouse hover
+
     if (event.is<sf::Event::MouseMoved>()) {
         const auto* mouseData = event.getIf<sf::Event::MouseMoved>();
         if (mouseData) {
@@ -153,7 +142,7 @@ void SortMenuState::handleInput(const sf::Event& event) {
 }
 
 void SortMenuState::update(float deltaTime) {
-    // Update button hover states
+
     sf::Vector2i mousePosI = sf::Mouse::getPosition(m_context.getWindow());
     sf::Vector2f mousePos = sf::Vector2f(mousePosI.x, mousePosI.y);
     
@@ -180,11 +169,12 @@ void SortMenuState::setAlgorithmCallback(AlgorithmCallback callback) {
 }
 
 void SortMenuState::onBubbleSortClicked() {
+    m_context.setSelectedSorter(std::make_unique<BubbleSort>());
+    
     if (m_algorithmCallback) {
         m_algorithmCallback(std::make_unique<BubbleSort>());
     }
     
-    // Navigate to VisualizerState
     EventBus& eventBus = m_context.getEventBus();
     Event visualizerEvent(EventType::StateChanged);
     visualizerEvent.setData(StateID::Visualizer);
@@ -192,11 +182,12 @@ void SortMenuState::onBubbleSortClicked() {
 }
 
 void SortMenuState::onInsertionSortClicked() {
+    m_context.setSelectedSorter(std::make_unique<InsertionSort>());
+    
     if (m_algorithmCallback) {
         m_algorithmCallback(std::make_unique<InsertionSort>());
     }
     
-    // Navigate to VisualizerState
     EventBus& eventBus = m_context.getEventBus();
     Event visualizerEvent(EventType::StateChanged);
     visualizerEvent.setData(StateID::Visualizer);
@@ -204,11 +195,12 @@ void SortMenuState::onInsertionSortClicked() {
 }
 
 void SortMenuState::onSelectionSortClicked() {
+    m_context.setSelectedSorter(std::make_unique<SelectionSort>());
+    
     if (m_algorithmCallback) {
         m_algorithmCallback(std::make_unique<SelectionSort>());
     }
     
-    // Navigate to VisualizerState
     EventBus& eventBus = m_context.getEventBus();
     Event visualizerEvent(EventType::StateChanged);
     visualizerEvent.setData(StateID::Visualizer);
@@ -216,11 +208,11 @@ void SortMenuState::onSelectionSortClicked() {
 }
 
 void SortMenuState::onBackClicked() {
-    // Navigate back to AlgorithmMenuState (or MainMenuState if not implemented)
+
     EventBus& eventBus = m_context.getEventBus();
     Event backEvent(EventType::StateChanged);
     backEvent.setData(StateID::MainMenu);
     eventBus.publish(backEvent);
 }
 
-} // namespace DSA
+} 

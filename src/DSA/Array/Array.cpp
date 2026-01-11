@@ -1,7 +1,4 @@
-/**
- * @file Array.cpp
- * @brief Implementation of the Array class
- */
+
 
 #include "Array.h"
 #include <cstdlib>
@@ -11,7 +8,6 @@
 
 namespace DSA {
 
-// Constants
 static constexpr std::size_t INITIAL_CAPACITY = 8;
 static constexpr std::size_t GROWTH_FACTOR = 2;
 
@@ -29,7 +25,7 @@ Array::Array(std::size_t size, int value)
 {
     if (m_capacity > 0) {
         allocate(m_capacity);
-        // Fill with initial value
+
         for (std::size_t i = 0; i < m_size; ++i) {
             m_data[i] = value;
         }
@@ -43,7 +39,7 @@ Array::Array(const Array& other)
 {
     if (m_capacity > 0 && m_size > 0) {
         allocate(m_capacity);
-        // Copy data
+
         for (std::size_t i = 0; i < m_size; ++i) {
             m_data[i] = other.m_data[i];
         }
@@ -67,8 +63,7 @@ Array::~Array() {
 Array& Array::operator=(const Array& other) {
     if (this != &other) {
         m_size = other.m_size;
-        
-        // Allocate new memory if needed
+
         if (m_capacity < other.m_size) {
             deallocate();
             m_capacity = other.m_size > 0 ? other.m_size : 0;
@@ -76,8 +71,7 @@ Array& Array::operator=(const Array& other) {
                 allocate(m_capacity);
             }
         }
-        
-        // Copy data
+
         if (m_size > 0 && m_data) {
             for (std::size_t i = 0; i < m_size; ++i) {
                 m_data[i] = other.m_data[i];
@@ -134,8 +128,7 @@ void Array::insert(std::size_t index, int value) {
     }
     
     ensureCapacity(m_size + 1);
-    
-    // Shift elements to the right
+
     for (std::size_t i = m_size; i > index; --i) {
         m_data[i] = m_data[i - 1];
     }
@@ -148,8 +141,7 @@ void Array::remove(std::size_t index) {
     if (index >= m_size) {
         throw std::out_of_range("Array index out of range for remove");
     }
-    
-    // Shift elements to the left
+
     for (std::size_t i = index; i < m_size - 1; ++i) {
         m_data[i] = m_data[i + 1];
     }
@@ -175,8 +167,7 @@ void Array::generateRandom(std::size_t count, int min, int max) {
     
     ensureCapacity(count);
     m_size = count;
-    
-    // Use random number generator
+
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_int_distribution<int> dis(min, max);
@@ -190,8 +181,7 @@ void Array::resize(std::size_t newSize, int value) {
     if (newSize > m_capacity) {
         ensureCapacity(newSize);
     }
-    
-    // Fill new elements with value
+
     for (std::size_t i = m_size; i < newSize; ++i) {
         m_data[i] = value;
     }
@@ -210,8 +200,7 @@ void Array::allocate(std::size_t newCapacity) {
         m_data = nullptr;
         return;
     }
-    
-    // Allocate raw memory
+
     m_data = static_cast<int*>(std::malloc(newCapacity * sizeof(int)));
     if (!m_data) {
         throw std::bad_alloc();
@@ -230,20 +219,17 @@ void Array::ensureCapacity(std::size_t minCapacity) {
     if (minCapacity <= m_capacity) {
         return;
     }
-    
-    // Calculate new capacity (grow by factor of 2)
+
     std::size_t newCapacity = m_capacity == 0 ? INITIAL_CAPACITY : m_capacity;
     while (newCapacity < minCapacity) {
         newCapacity *= GROWTH_FACTOR;
     }
-    
-    // Reallocate
+
     int* newData = static_cast<int*>(std::malloc(newCapacity * sizeof(int)));
     if (!newData) {
         throw std::bad_alloc();
     }
-    
-    // Copy existing data
+
     if (m_data) {
         for (std::size_t i = 0; i < m_size; ++i) {
             newData[i] = m_data[i];
@@ -255,4 +241,4 @@ void Array::ensureCapacity(std::size_t minCapacity) {
     m_capacity = newCapacity;
 }
 
-} // namespace DSA
+} 

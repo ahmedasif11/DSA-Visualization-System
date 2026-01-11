@@ -1,7 +1,4 @@
-/**
- * @file State.cpp
- * @brief Implementation of the State class
- */
+
 
 #include "State.h"
 #include "StateContext.h"
@@ -21,4 +18,4 @@ void State::resume() {
     m_isPaused = false;
 }
 
-} // namespace DSA
+} 

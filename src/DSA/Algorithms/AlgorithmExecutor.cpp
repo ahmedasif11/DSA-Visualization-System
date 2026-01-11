@@ -1,7 +1,4 @@
-/**
- * @file AlgorithmExecutor.cpp
- * @brief Implementation of AlgorithmExecutor
- */
+
 
 #include "AlgorithmExecutor.h"
 #include "../../App/Config.h"
@@ -16,7 +13,7 @@ AlgorithmExecutor::AlgorithmExecutor()
     , m_state(State::Idle)
     , m_speed(Config::ANIMATION_DEFAULT_SPEED)
     , m_timeSinceLastStep(0.0f)
-    , m_stepDelay(0.5f) // Default 0.5 seconds per step
+    , m_stepDelay(0.5f)
 {
 }
 
@@ -32,16 +29,15 @@ void AlgorithmExecutor::setArray(const Array& array) {
 
 bool AlgorithmExecutor::start() {
     if (m_state == State::Running) {
-        return false; // Already running
+        return false;
     }
     
     if (m_state == State::Paused) {
-        // Resume instead
+
         resume();
         return true;
     }
-    
-    // Validate inputs
+
     if (!m_sorter) {
         return false;
     }
@@ -49,21 +45,18 @@ bool AlgorithmExecutor::start() {
     if (m_array.isEmpty()) {
         return false;
     }
-    
-    // Generate steps if not already generated
+
     if (m_steps.empty()) {
         m_steps = m_sorter->sort(m_array);
         if (m_steps.empty()) {
             return false;
         }
     }
-    
-    // Reset to beginning
+
     m_currentStepIndex = 0;
     m_state = State::Running;
     m_timeSinceLastStep = 0.0f;
-    
-    // Calculate initial step delay
+
     if (!m_steps.empty()) {
         m_stepDelay = calculateStepDelay(m_steps[0]);
     }
@@ -98,13 +91,13 @@ void AlgorithmExecutor::stepForward() {
     if (m_currentStepIndex < m_steps.size() - 1) {
         advanceStep();
     } else {
-        // Already at last step
+
         m_state = State::Completed;
     }
 }
 
 void AlgorithmExecutor::setSpeed(float speed) {
-    // Clamp speed to valid range
+
     if (speed < Config::ANIMATION_MIN_SPEED) {
         m_speed = Config::ANIMATION_MIN_SPEED;
     } else if (speed > Config::ANIMATION_MAX_SPEED) {
@@ -123,17 +116,14 @@ void AlgorithmExecutor::update(float deltaTime) {
         m_state = State::Completed;
         return;
     }
-    
-    // Accumulate time
+
     m_timeSinceLastStep += deltaTime;
-    
-    // Check if it's time to advance
+
     float requiredDelay = m_stepDelay / m_speed;
     if (m_timeSinceLastStep >= requiredDelay) {
         advanceStep();
         m_timeSinceLastStep = 0.0f;
-        
-        // Calculate delay for next step
+
         if (m_currentStepIndex < m_steps.size()) {
             m_stepDelay = calculateStepDelay(m_steps[m_currentStepIndex]);
         }
@@ -167,13 +157,13 @@ void AlgorithmExecutor::advanceStep() {
     if (m_currentStepIndex < m_steps.size() - 1) {
         ++m_currentStepIndex;
     } else {
-        // Reached the end
+
         m_state = State::Completed;
     }
 }
 
 float AlgorithmExecutor::calculateStepDelay(const SortStep& step) const {
-    // Different delays for different step types
+
     switch (step.type) {
         case StepType::Compare:
             return Config::ANIMATION_COMPARE_DURATION_MS / 1000.0f;
@@ -185,11 +175,11 @@ float AlgorithmExecutor::calculateStepDelay(const SortStep& step) const {
             return Config::ANIMATION_COMPARE_DURATION_MS / 1000.0f;
             
         case StepType::Complete:
-            return 1.0f; // 1 second pause at completion
+            return 1.0f;
             
         default:
-            return 0.5f; // Default delay
+            return 0.5f;
     }
 }
 
-} // namespace DSA
+} 

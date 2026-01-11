@@ -1,65 +1,63 @@
-/**
- * @file InsertionSort.cpp
- * @brief Implementation of Insertion Sort algorithm
- */
-
 #include "InsertionSort.h"
 #include "../../Array/Array.h"
 #include <sstream>
+#include <map>
 
 namespace DSA {
 
 std::vector<SortStep> InsertionSort::sort(const Array& array) {
     std::vector<SortStep> steps;
-    
-    // Handle empty or single-element arrays
+
     if (array.size() <= 1) {
         if (array.size() == 1) {
             steps.push_back(createCompleteStep(array));
         }
         return steps;
     }
-    
-    // Create a working copy of the array
+
     Array workingArray = array;
     
     std::size_t n = workingArray.size();
-    
-    // Start from the second element (index 1)
+
     for (std::size_t i = 1; i < n; ++i) {
         int key = workingArray[i];
         std::size_t j = i;
         
-        // Highlight the current element being inserted
         std::ostringstream highlightMsg;
         highlightMsg << "Selecting element at index " << i 
                      << " (value: " << key << ") to insert";
         std::vector<std::size_t> highlightIndices = {i};
-        steps.push_back(createHighlightStep(workingArray, highlightIndices, highlightMsg.str()));
+        std::map<std::size_t, ElementRole> roles;
+        roles[i] = ElementRole::Key;
         
-        // Move elements greater than key one position ahead
+        SortStep keyStep = createHighlightStep(workingArray, highlightIndices, roles, highlightMsg.str());
+        keyStep.setAnnotation("key", std::to_string(key));
+        steps.push_back(keyStep);
+        
         while (j > 0 && workingArray[j - 1] > key) {
-            // Compare with previous element
             std::ostringstream compareMsg;
             compareMsg << "Comparing element at index " << (j - 1) 
                        << " (value: " << workingArray[j - 1] 
                        << ") with key (value: " << key << ")";
             std::vector<std::size_t> compareIndices = {j - 1, j};
-            steps.push_back(createCompareStep(workingArray, compareIndices, compareMsg.str()));
             
-            // Shift element to the right
+            SortStep compareStep = createCompareStep(workingArray, compareIndices, compareMsg.str());
+            compareStep.setAnnotation("key", std::to_string(key));
+            steps.push_back(compareStep);
+            
             workingArray[j] = workingArray[j - 1];
             --j;
             
-            // Show the shift (visual representation)
             std::ostringstream shiftMsg;
             shiftMsg << "Shifting element at index " << (j) 
                      << " to index " << (j + 1);
             std::vector<std::size_t> shiftIndices = {j, j + 1};
-            steps.push_back(createHighlightStep(workingArray, shiftIndices, shiftMsg.str()));
+            
+            SortStep shiftStep = createHighlightStep(workingArray, shiftIndices, shiftMsg.str());
+            shiftStep.setAnnotation("key", std::to_string(key));
+            steps.push_back(shiftStep);
         }
         
-        // Insert key at correct position
         if (j != i) {
             workingArray[j] = key;
             
@@ -69,17 +67,17 @@ std::vector<SortStep> InsertionSort::sort(const Array& array) {
             steps.push_back(createHighlightStep(workingArray, insertIndices, insertMsg.str()));
         }
         
-        // Highlight sorted portion
         std::ostringstream sortedMsg;
         sortedMsg << "Elements up to index " << i << " are now sorted";
         std::vector<std::size_t> sortedIndices;
+        std::map<std::size_t, ElementRole> sortedRoles;
         for (std::size_t k = 0; k <= i; ++k) {
             sortedIndices.push_back(k);
+            sortedRoles[k] = ElementRole::Sorted;
         }
-        steps.push_back(createHighlightStep(workingArray, sortedIndices, sortedMsg.str()));
+        steps.push_back(createHighlightStep(workingArray, sortedIndices, sortedRoles, sortedMsg.str()));
     }
-    
-    // Add completion step
+
     steps.push_back(createCompleteStep(workingArray));
     
     return steps;
@@ -91,4 +89,4 @@ std::string InsertionSort::getDescription() const {
            "Similar to how you sort playing cards in your hand.";
 }
 
-} // namespace DSA
+}

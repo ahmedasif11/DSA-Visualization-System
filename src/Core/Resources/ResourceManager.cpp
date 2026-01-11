@@ -1,7 +1,4 @@
-/**
- * @file ResourceManager.cpp
- * @brief Implementation of the ResourceManager class
- */
+
 
 #include "ResourceManager.h"
 #include "ResourceIDs.h"
@@ -17,29 +14,25 @@ ResourceManager& ResourceManager::getInstance() {
 
 bool ResourceManager::loadFont(FontID id, const std::string& filepath) {
     std::string fullPath = m_basePath + filepath;
-    
-    // Try to load from specified path first
+
     auto font = std::make_unique<sf::Font>();
     if (font->openFromFile(fullPath)) {
         m_fonts[id] = std::move(font);
         return true;
     }
-    
-    // Fallback: Try system fonts on Windows
-    // Common Windows system font paths
+
+
     std::vector<std::string> systemFontPaths = {
         "C:/Windows/Fonts/arial.ttf",
         "C:/Windows/Fonts/tahoma.ttf",
         "C:/Windows/Fonts/calibri.ttf",
         "C:/Windows/Fonts/segoeui.ttf"
     };
-    
-    // For monospace, prefer Consolas
+
     if (id == FontID::Monospace) {
         systemFontPaths.insert(systemFontPaths.begin(), "C:/Windows/Fonts/consola.ttf");
     }
-    
-    // Try system fonts (create new font object for each attempt)
+
     for (const auto& sysPath : systemFontPaths) {
         auto sysFont = std::make_unique<sf::Font>();
         if (sysFont->openFromFile(sysPath)) {
@@ -47,8 +40,7 @@ bool ResourceManager::loadFont(FontID id, const std::string& filepath) {
             return true;
         }
     }
-    
-    // All attempts failed
+
     return false;
 }
 
@@ -90,7 +82,7 @@ bool ResourceManager::hasTexture(TextureID id) const {
 
 void ResourceManager::setBasePath(const std::string& path) {
     m_basePath = path;
-    // Ensure trailing slash
+
     if (!m_basePath.empty() && m_basePath.back() != '/' && m_basePath.back() != '\\') {
         m_basePath += '/';
     }
@@ -109,4 +101,4 @@ void ResourceManager::clearTexture(TextureID id) {
     m_textures.erase(id);
 }
 
-} // namespace DSA
+} 

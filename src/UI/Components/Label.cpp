@@ -1,7 +1,4 @@
-/**
- * @file Label.cpp
- * @brief Implementation of Label component
- */
+
 
 #include "Label.h"
 #include "../Theme/ThemeManager.h"
@@ -16,18 +13,17 @@ Label::Label(const sf::Vector2f& position, const std::string& text)
 }
 
 void Label::setText(const std::string& text) {
-    // SFML 3.0: Text requires font in constructor
+
     try {
         ThemeManager& tm = ThemeManager::getInstance();
         tm.loadFonts();
         const sf::Font& font = tm.getMainFont();
         const Theme& theme = tm.getTheme();
-        
-        // Create text with font (SFML 3.0 requirement)
+
         m_text.emplace(font, text, theme.fontSizeNormal);
         m_text->setFillColor(theme.textColor);
     } catch (...) {
-        // Font not available, reset text
+
         m_text.reset();
     }
 }
@@ -91,5 +87,5 @@ sf::FloatRect Label::getLocalBounds() const {
     return sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(0, 0));
 }
 
-} // namespace UI
-} // namespace DSA
+}
+} 

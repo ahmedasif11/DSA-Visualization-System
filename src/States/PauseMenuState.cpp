@@ -1,7 +1,4 @@
-/**
- * @file PauseMenuState.cpp
- * @brief Implementation of PauseMenuState
- */
+
 
 #include "PauseMenuState.h"
 #include "../Core/State/StateContext.h"
@@ -29,12 +26,10 @@ void PauseMenuState::onEnter() {
     setupButtons();
     
     sf::Vector2u windowSize = m_context.getWindow().getSize();
-    
-    // Setup semi-transparent overlay
+
     m_overlay.setSize(sf::Vector2f(windowSize.x, windowSize.y));
-    m_overlay.setFillColor(sf::Color(0, 0, 0, 180)); // Semi-transparent black
-    
-    // Setup menu background
+    m_overlay.setFillColor(sf::Color(0, 0, 0, 180));
+
     float menuWidth = 300.0f;
     float menuHeight = 250.0f;
     float menuX = (static_cast<float>(windowSize.x) - menuWidth) / 2.0f;
@@ -46,10 +41,9 @@ void PauseMenuState::onEnter() {
         Config::Colors::PRIMARY_R,
         Config::Colors::PRIMARY_G,
         Config::Colors::PRIMARY_B,
-        240 // Semi-transparent
+        240
     ));
-    
-    // Setup title label
+
     m_titleLabel.setText("PAUSED");
     m_titleLabel.setPosition(sf::Vector2f(menuX + menuWidth / 2.0f - 60.0f, menuY + 20.0f));
     
@@ -70,8 +64,7 @@ void PauseMenuState::setupButtons() {
     float buttonSpacing = 15.0f;
     float startY = menuY + 80.0f;
     float centerX = menuX + menuWidth / 2.0f;
-    
-    // Resume button
+
     auto resumeBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -79,8 +72,7 @@ void PauseMenuState::setupButtons() {
     );
     resumeBtn->setCallback([this]() { onResumeClicked(); });
     m_buttons.push_back(std::move(resumeBtn));
-    
-    // Main Menu button
+
     auto mainMenuBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY + buttonHeight + buttonSpacing),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -88,8 +80,7 @@ void PauseMenuState::setupButtons() {
     );
     mainMenuBtn->setCallback([this]() { onMainMenuClicked(); });
     m_buttons.push_back(std::move(mainMenuBtn));
-    
-    // Exit button
+
     auto exitBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX - buttonWidth / 2.0f, startY + 2 * (buttonHeight + buttonSpacing)),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -100,7 +91,7 @@ void PauseMenuState::setupButtons() {
 }
 
 void PauseMenuState::handleInput(const sf::Event& event) {
-    // Handle keyboard input
+
     if (event.is<sf::Event::KeyPressed>()) {
         const auto* keyData = event.getIf<sf::Event::KeyPressed>();
         if (keyData) {
@@ -124,8 +115,7 @@ void PauseMenuState::handleInput(const sf::Event& event) {
             }
         }
     }
-    
-    // Handle mouse input
+
     if (event.is<sf::Event::MouseButtonPressed>()) {
         const auto* mouseData = event.getIf<sf::Event::MouseButtonPressed>();
         if (mouseData && mouseData->button == sf::Mouse::Button::Left) {
@@ -140,8 +130,7 @@ void PauseMenuState::handleInput(const sf::Event& event) {
             }
         }
     }
-    
-    // Handle mouse hover
+
     if (event.is<sf::Event::MouseMoved>()) {
         const auto* mouseData = event.getIf<sf::Event::MouseMoved>();
         if (mouseData) {
@@ -163,30 +152,27 @@ void PauseMenuState::update(float deltaTime) {
 }
 
 void PauseMenuState::render(sf::RenderTarget& target) {
-    // Render overlay
+
     target.draw(m_overlay);
-    
-    // Render menu background
+
     target.draw(m_menuBackground);
-    
-    // Render title
+
     m_titleLabel.render(target);
-    
-    // Render buttons
+
     for (auto& button : m_buttons) {
         button->render(target);
     }
 }
 
 void PauseMenuState::onResumeClicked() {
-    // Pop this state to return to previous state (VisualizerState)
+
     EventBus& eventBus = m_context.getEventBus();
     Event popEvent(EventType::StatePopped);
     eventBus.publish(popEvent);
 }
 
 void PauseMenuState::onMainMenuClicked() {
-    // Navigate to MainMenuState
+
     EventBus& eventBus = m_context.getEventBus();
     Event mainMenuEvent(EventType::StateChanged);
     mainMenuEvent.setData(StateID::MainMenu);
@@ -194,10 +180,10 @@ void PauseMenuState::onMainMenuClicked() {
 }
 
 void PauseMenuState::onExitClicked() {
-    // Emit window close event
+
     EventBus& eventBus = m_context.getEventBus();
     Event closeEvent(EventType::WindowClosed);
     eventBus.publish(closeEvent);
 }
 
-} // namespace DSA
+} 

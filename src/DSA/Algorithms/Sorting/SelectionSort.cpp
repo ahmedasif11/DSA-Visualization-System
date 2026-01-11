@@ -1,53 +1,50 @@
-/**
- * @file SelectionSort.cpp
- * @brief Implementation of Selection Sort algorithm
- */
-
 #include "SelectionSort.h"
 #include "../../Array/Array.h"
 #include <sstream>
+#include <map>
 
 namespace DSA {
 
 std::vector<SortStep> SelectionSort::sort(const Array& array) {
     std::vector<SortStep> steps;
-    
-    // Handle empty or single-element arrays
+
     if (array.size() <= 1) {
         if (array.size() == 1) {
             steps.push_back(createCompleteStep(array));
         }
         return steps;
     }
-    
-    // Create a working copy of the array
+
     Array workingArray = array;
     
     std::size_t n = workingArray.size();
-    
-    // Outer loop: one element at a time
+
     for (std::size_t i = 0; i < n - 1; ++i) {
-        // Find the minimum element in the unsorted portion
         std::size_t minIndex = i;
         
-        // Highlight current position
         std::ostringstream startMsg;
         startMsg << "Starting pass " << (i + 1) << ", searching for minimum from index " << i;
         std::vector<std::size_t> startIndices = {i};
-        steps.push_back(createHighlightStep(workingArray, startIndices, startMsg.str()));
+        std::map<std::size_t, ElementRole> startRoles;
+        startRoles[i] = ElementRole::Minimum;
+        SortStep startStep = createHighlightStep(workingArray, startIndices, startRoles, startMsg.str());
+        startStep.setAnnotation("minimum", std::to_string(workingArray[minIndex]));
+        steps.push_back(startStep);
         
-        // Search for minimum
         for (std::size_t j = i + 1; j < n; ++j) {
-            // Compare current element with minimum found so far
             std::ostringstream compareMsg;
             compareMsg << "Comparing element at index " << j 
                        << " (value: " << workingArray[j] 
                        << ") with minimum at index " << minIndex 
                        << " (value: " << workingArray[minIndex] << ")";
             std::vector<std::size_t> compareIndices = {j, minIndex};
-            steps.push_back(createCompareStep(workingArray, compareIndices, compareMsg.str()));
+            SortStep compareStep = createCompareStep(workingArray, compareIndices, compareMsg.str());
+            std::map<std::size_t, ElementRole> compareRoles;
+            compareRoles[minIndex] = ElementRole::Minimum;
+            compareStep.roles = compareRoles;
+            compareStep.setAnnotation("minimum", std::to_string(workingArray[minIndex]));
+            steps.push_back(compareStep);
             
-            // Update minimum if current element is smaller
             if (workingArray[j] < workingArray[minIndex]) {
                 minIndex = j;
                 
@@ -55,41 +52,52 @@ std::vector<SortStep> SelectionSort::sort(const Array& array) {
                 newMinMsg << "New minimum found at index " << minIndex 
                           << " (value: " << workingArray[minIndex] << ")";
                 std::vector<std::size_t> minIndices = {minIndex};
-                steps.push_back(createHighlightStep(workingArray, minIndices, newMinMsg.str()));
+                std::map<std::size_t, ElementRole> roles;
+                roles[minIndex] = ElementRole::Minimum;
+                
+                SortStep minStep = createHighlightStep(workingArray, minIndices, roles, newMinMsg.str());
+                minStep.setAnnotation("minimum", std::to_string(workingArray[minIndex]));
+                steps.push_back(minStep);
             }
         }
         
-        // Swap minimum with first element of unsorted portion
         if (minIndex != i) {
             std::ostringstream swapMsg;
             swapMsg << "Swapping minimum at index " << minIndex 
                     << " (value: " << workingArray[minIndex] 
                     << ") with element at index " << i 
                     << " (value: " << workingArray[i] << ")";
-            steps.push_back(createSwapStep(workingArray, i, minIndex, swapMsg.str()));
+            SortStep swapStep = createSwapStep(workingArray, i, minIndex, swapMsg.str());
+            std::map<std::size_t, ElementRole> swapRoles;
+            swapRoles[minIndex] = ElementRole::Minimum;
+            swapStep.roles = swapRoles;
+            swapStep.setAnnotation("minimum", std::to_string(workingArray[minIndex]));
+            steps.push_back(swapStep);
             
-            // Perform the swap on working array
             workingArray.swap(i, minIndex);
         } else {
-            // Element already in correct position
             std::ostringstream noSwapMsg;
             noSwapMsg << "Element at index " << i 
                       << " is already in correct position";
             std::vector<std::size_t> noSwapIndices = {i};
-            steps.push_back(createHighlightStep(workingArray, noSwapIndices, noSwapMsg.str()));
+            std::map<std::size_t, ElementRole> noSwapRoles;
+            noSwapRoles[i] = ElementRole::Minimum;
+            SortStep noSwapStep = createHighlightStep(workingArray, noSwapIndices, noSwapRoles, noSwapMsg.str());
+            noSwapStep.setAnnotation("minimum", std::to_string(workingArray[i]));
+            steps.push_back(noSwapStep);
         }
         
-        // Highlight sorted portion
         std::ostringstream sortedMsg;
         sortedMsg << "Elements up to index " << i << " are now sorted";
         std::vector<std::size_t> sortedIndices;
+        std::map<std::size_t, ElementRole> sortedRoles;
         for (std::size_t k = 0; k <= i; ++k) {
             sortedIndices.push_back(k);
+            sortedRoles[k] = ElementRole::Sorted;
         }
-        steps.push_back(createHighlightStep(workingArray, sortedIndices, sortedMsg.str()));
+        steps.push_back(createHighlightStep(workingArray, sortedIndices, sortedRoles, sortedMsg.str()));
     }
-    
-    // Add completion step
+
     steps.push_back(createCompleteStep(workingArray));
     
     return steps;
@@ -101,4 +109,4 @@ std::string SelectionSort::getDescription() const {
            "Similar to repeatedly selecting the smallest card from a deck.";
 }
 
-} // namespace DSA
+}

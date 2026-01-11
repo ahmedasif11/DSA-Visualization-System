@@ -55,6 +55,18 @@ struct Colors {
     static constexpr unsigned int WARNING_R = 241;
     static constexpr unsigned int WARNING_G = 196;
     static constexpr unsigned int WARNING_B = 15;
+    
+    static constexpr unsigned int KEY_R = 155;
+    static constexpr unsigned int KEY_G = 89;
+    static constexpr unsigned int KEY_B = 182;
+    
+    static constexpr unsigned int MINIMUM_R = 142;
+    static constexpr unsigned int MINIMUM_G = 68;
+    static constexpr unsigned int MINIMUM_B = 173;
+    
+    static constexpr unsigned int PIVOT_R = 230;
+    static constexpr unsigned int PIVOT_G = 126;
+    static constexpr unsigned int PIVOT_B = 34;
 };
 
 } 

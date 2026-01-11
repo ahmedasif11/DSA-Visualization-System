@@ -1,7 +1,4 @@
-/**
- * @file MainMenuState.cpp
- * @brief Implementation of MainMenuState
- */
+
 
 #include "MainMenuState.h"
 #include "../Core/State/StateContext.h"
@@ -26,30 +23,26 @@ MainMenuState::MainMenuState(StateContext& context)
 
 void MainMenuState::onEnter() {
     try {
-        // Initialize theme and fonts
+
         UI::ThemeManager& tm = UI::ThemeManager::getInstance();
         tm.loadFonts();
         
         sf::Vector2u windowSize = m_context.getWindow().getSize();
         const UI::Theme& theme = tm.getTheme();
-        
-        // Setup background
+
         m_background.setSize(sf::Vector2f(windowSize.x, windowSize.y));
         m_background.setFillColor(theme.backgroundColor);
-        
-        // Setup title label
+
         m_titleLabel.setText("DSA Visualization System");
         m_titleLabel.setFontSize(theme.fontSizeTitle);
         m_titleLabel.setColor(theme.primaryColor);
-        
-        // Center title
+
         sf::FloatRect titleBounds = m_titleLabel.getLocalBounds();
         m_titleLabel.setPosition(sf::Vector2f(
             (windowSize.x - titleBounds.size.x) / 2.0f,
             100.0f
         ));
-        
-        // Setup buttons
+
         setupButtons();
         
         std::cout << "MainMenuState entered" << std::endl;
@@ -71,8 +64,7 @@ void MainMenuState::setupButtons() {
     float buttonSpacing = 20.0f;
     float startY = windowSize.y / 2.0f - 100.0f;
     float centerX = (windowSize.x - buttonWidth) / 2.0f;
-    
-    // Algorithms button
+
     auto algorithmsBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX, startY),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -80,8 +72,7 @@ void MainMenuState::setupButtons() {
     );
     algorithmsBtn->setCallback([this]() { onAlgorithmsClicked(); });
     m_buttons.push_back(std::move(algorithmsBtn));
-    
-    // Data Structures button (disabled/locked)
+
     auto dataStructuresBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX, startY + buttonHeight + buttonSpacing),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -89,8 +80,7 @@ void MainMenuState::setupButtons() {
     );
     dataStructuresBtn->setEnabled(false);
     m_buttons.push_back(std::move(dataStructuresBtn));
-    
-    // Exit button
+
     auto exitBtn = std::make_unique<UI::Button>(
         sf::Vector2f(centerX, startY + 2 * (buttonHeight + buttonSpacing)),
         sf::Vector2f(buttonWidth, buttonHeight),
@@ -102,7 +92,7 @@ void MainMenuState::setupButtons() {
 
 void MainMenuState::onAlgorithmsClicked() {
     std::cout << "Algorithms clicked" << std::endl;
-    // Navigate to AlgorithmMenuState
+
     EventBus& eventBus = m_context.getEventBus();
     Event algorithmMenuEvent(EventType::StateChanged);
     algorithmMenuEvent.setData(StateID::AlgorithmMenu);
@@ -115,7 +105,7 @@ void MainMenuState::onExitClicked() {
 }
 
 void MainMenuState::handleInput(const sf::Event& event) {
-    // Get mouse position for button interactions
+
     sf::Vector2f mousePos;
     if (event.is<sf::Event::MouseMoved>()) {
         auto mouseData = event.getIf<sf::Event::MouseMoved>();
@@ -133,19 +123,17 @@ void MainMenuState::handleInput(const sf::Event& event) {
             mousePos = sf::Vector2f(mouseData->position.x, mouseData->position.y);
         }
     } else {
-        // Get actual mouse position from window
+
         sf::Vector2i mousePosI = sf::Mouse::getPosition(m_context.getWindow());
         mousePos = sf::Vector2f(mousePosI.x, mousePosI.y);
     }
-    
-    // Handle button input
+
     for (auto& button : m_buttons) {
         if (button) {
             button->handleInput(event, mousePos);
         }
     }
-    
-    // Handle ESC key to exit
+
     if (event.is<sf::Event::KeyPressed>()) {
         auto keyData = event.getIf<sf::Event::KeyPressed>();
         if (keyData && keyData->code == sf::Keyboard::Key::Escape) {
@@ -178,4 +166,4 @@ void MainMenuState::render(sf::RenderTarget& target) {
     }
 }
 
-} // namespace DSA
+} 

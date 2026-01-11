@@ -36,6 +36,7 @@ SOURCES = \
 	src/States/PauseMenuState.cpp \
 	src/UI/Components/Button.cpp \
 	src/UI/Components/Label.cpp \
+	src/UI/Components/Slider.cpp \
 	src/UI/Theme/Theme.cpp \
 	src/UI/Theme/ThemeManager.cpp \
 	src/DSA/Array/Array.cpp \
@@ -44,7 +45,11 @@ SOURCES = \
 	src/DSA/Algorithms/Sorting/InsertionSort.cpp \
 	src/DSA/Algorithms/Sorting/SelectionSort.cpp \
 	src/DSA/Algorithms/AlgorithmExecutor.cpp \
-	src/Visual/Visualizer/BarVisualizer.cpp
+	src/Visual/Visualizer/BarVisualizer.cpp \
+	src/Visual/Components/AnnotationRenderer.cpp \
+	src/Visual/Components/BarComponent.cpp \
+	src/Visual/Components/LegendComponent.cpp \
+	src/Visual/VisualizationRenderer.cpp
 
 # Object files
 OBJECTS = $(SOURCES:src/%.cpp=$(BUILD_DIR)/%.o)
@@ -68,6 +73,7 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)/DSA/Algorithms/Sorting
 	mkdir -p $(BUILD_DIR)/DSA/Algorithms
 	mkdir -p $(BUILD_DIR)/Visual/Visualizer
+	mkdir -p $(BUILD_DIR)/Visual/Components
 	mkdir -p $(BIN_DIR)
 
 # Build executable
