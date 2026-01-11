@@ -218,8 +218,9 @@ void VisualizerState::initializeUI() {
     
     // Setup status label
     m_statusLabel.setText("Ready");
-    m_statusLabel.setPosition(sf::Vector2f(20, 60));
-    m_statusLabel.setColor(sf::Color::White);
+    m_statusLabel.setPosition(sf::Vector2f(20, 75));
+    m_statusLabel.setColor(sf::Color(200, 220, 255));
+    m_statusLabel.setFontSize(18);
     
     // Setup step label
     m_stepLabel.setText("Step: 0 / 0");
@@ -251,13 +252,14 @@ void VisualizerState::updateUI() {
     std::string algorithmName = m_executor.getAlgorithmName();
     if (!algorithmName.empty()) {
         m_titleLabel.setText(algorithmName);
-        // Center the title
         sf::Vector2u windowSize = m_context.getWindow().getSize();
         sf::FloatRect titleBounds = m_titleLabel.getLocalBounds();
         m_titleLabel.setPosition(sf::Vector2f(
             (static_cast<float>(windowSize.x) - titleBounds.size.x) / 2.0f,
-            20.0f
+            15.0f
         ));
+        m_titleLabel.setFontSize(42);
+        m_titleLabel.setColor(sf::Color(255, 255, 100));
     }
     
     // Update status label
@@ -277,12 +279,20 @@ void VisualizerState::updateUI() {
             break;
     }
     m_statusLabel.setText(statusText);
+    m_statusLabel.setPosition(sf::Vector2f(20, 75));
+    m_statusLabel.setColor(sf::Color(200, 220, 255));
+    m_statusLabel.setFontSize(18);
     
     // Update step counter
     std::ostringstream stepText;
     stepText << "Step: " << (m_executor.getCurrentStepIndex() + 1) 
              << " / " << m_executor.getTotalSteps();
     m_stepLabel.setText(stepText.str());
+    sf::Vector2u windowSize = m_context.getWindow().getSize();
+    sf::FloatRect stepBounds = m_stepLabel.getLocalBounds();
+    m_stepLabel.setPosition(sf::Vector2f(static_cast<float>(windowSize.x) - stepBounds.size.x - 20.0f, 75.0f));
+    m_stepLabel.setColor(sf::Color(200, 220, 255));
+    m_stepLabel.setFontSize(18);
     
     // Update play/pause button text
     if (m_executor.getState() == AlgorithmExecutor::State::Running) {

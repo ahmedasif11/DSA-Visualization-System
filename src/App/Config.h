@@ -16,11 +16,11 @@ constexpr int ARRAY_MIN_VALUE = 1;
 constexpr int ARRAY_MAX_VALUE = 100;
 constexpr std::size_t ARRAY_DEFAULT_SIZE = 10;
 
-constexpr float ANIMATION_SWAP_DURATION_MS = 500.0f;
-constexpr float ANIMATION_COMPARE_DURATION_MS = 200.0f;
+constexpr float ANIMATION_SWAP_DURATION_MS = 1200.0f;
+constexpr float ANIMATION_COMPARE_DURATION_MS = 800.0f;
 constexpr float ANIMATION_MIN_SPEED = 0.25f;
 constexpr float ANIMATION_MAX_SPEED = 4.0f;
-constexpr float ANIMATION_DEFAULT_SPEED = 1.0f;
+constexpr float ANIMATION_DEFAULT_SPEED = 0.5f;
 
 constexpr const char* FONT_MAIN_PATH = "fonts/main.ttf";
 constexpr const char* FONT_MONOSPACE_PATH = "fonts/monospace.ttf";
