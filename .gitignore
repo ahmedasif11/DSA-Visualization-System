@@ -1,0 +1,59 @@
+# Build directories
+build/
+bin/
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile.cmake
+*.cmake
+!CMakeLists.txt
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Visual Studio
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Compiled files
+*.class
+*.pyc
+*.pyo
+
+# Logs
+*.log
+build_errors.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Dependencies (if using package managers)
+vendor/
+deps/
